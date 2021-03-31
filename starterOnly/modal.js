@@ -19,6 +19,8 @@ const birthdate = document.getElementById("birthdate");
 const nbOfCompetitions = document.getElementById("quantity");
 const radios = document.querySelectorAll("input[type='radio']");
 const checkbox = document.querySelectorAll("input[type='checkbox']");
+const btnSubmit = document.querySelector('.btn-submit');
+const allData = [firstName, lastName, email, birthdate, nbOfCompetitions, radios, checkbox];
 
 // management modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -26,23 +28,21 @@ closeCross.addEventListener("click", closeModal);
 
 // verification of entered data
 firstName.addEventListener("blur", function (e) {
-    minLength(e.target.value, 2);
     isEmpty(e.target.value);
+    minLength(e.target.value, 2);
 })
 
 lastName.addEventListener("blur", function (e) {
-    minLength(e.target.value, 2);
     isEmpty(e.target.value);
+    minLength(e.target.value, 2);
 })
 
 email.addEventListener("blur", function (e) {
-    isEmpty(e.target.value);
     emailValidity(e.target.value);
 })
 
 birthdate.addEventListener("blur", function (e) {
-    isEmpty(e.target.value);
-    getValue(e.target);
+
 })
 
 nbOfCompetitions.addEventListener("blur", function (e) {
@@ -52,11 +52,12 @@ nbOfCompetitions.addEventListener("blur", function (e) {
 
 isChecked(radios);
 radios.forEach((radio) => radio.addEventListener("change", function (e) {
-    getValue(e.target);
+
 }));
 
-state(checkbox[0]);
-state(checkbox[1]);
+btnSubmit.addEventListener("click", function (e) {
+    validationTest(e);
+});
 
 // launch modal form
 function launchModal() {
@@ -70,19 +71,25 @@ function closeModal() {
 
 // minimum character test
 function minLength(data, nbOfCharacters) {
+    let results = [];
     if (data < nbOfCharacters) {
-        console.log("Vous devez avoir un minimum de " + nbOfCharacters + " caractéres");
+        results.push(true, "vous devez avoir un minimum de " + nbOfCharacters + " caracteres");
+        return results;
     } else {
-        console.log("vous avez 2 caracteres");
+        results.push(false);
+        return results;
     }
 }
 
 // test field not empty
 function isEmpty(data) {
-    if (data.length == 0) {
-        console.log("le champ est vide");
+    let results = [];
+    if (data.length == 0 || data.length == "") {
+        results.push(true, "le champ est vide");
+        return results;
     } else {
-        console.log("le champ n'est pas vide");
+        results.push(false);
+        return results;
     }
 }
 
@@ -90,61 +97,102 @@ function isEmpty(data) {
 function emailValidity(data) {
     let emailReg = new RegExp(/([\w-\.]+@[\w\.]+\.{1}[\w]+)/);
     let result = emailReg.test(data);
-    if (result) {
-        console.log("L'email est valide");
+    let results = [];
+    if (result == false) {
+        return results.push(true, "L'email n'est pas valide");
     } else {
-        console.log("L'email n'est pas valide");
+        return results.push(false);
     }
 }
 
 // test numeric value 
 function typeOfValue(data) {
     let value = parseInt(data);
-    if (typeof (value) === "number") {
-        console.log("C'est un nombre");
+    let results = [];
+    if (typeof (value) !== "number") {
+        return results.push(true, "Ce n'est pas un nombre");
     } else {
-        console.log("Ce n'est pas un nombre");
+        return results.push(false);
     }
 }
 
 // test interval value
 function interval(data, minValue, maxValue) {
     let value = parseInt(data);
-    if (value > minValue && value < maxValue) {
-        console.log("C'est un nombre compris entre " + minValue + " et " + maxValue);
+    let results = [];
+    if (value < minValue && value > maxValue) {
+        return results.push(true, "Ce n'est pas un nombre compris entre " + minValue + " et " + maxValue);
     } else {
-        console.log("Ce n'est pas un nombre compris entre 0 et 99");
+        return results.push(false);
     }
 }
 
 // check the selection of a radio button
 function isChecked(data) {
+    let results = [];
     for (let i = 0; i < data.length; i++) {
-        if (data[i].checked) {
-            console.log("une radio est selectionné");
+        if (data[i].checked == false) {
+            return results.push(true, "aucune radio n'est selectionné");
         } else {
-            console.log("aucune radio n'est selectionné");
+            return results.push(false);
         }
     }
 }
 
-// get value
-function getValue(data) {
-    console.log(data.value);
-}
-
 // check the state of the general conditions box, the other box is optional / can be left unchecked
 function state(data) {
-    if (data.checked) {
-        console.log("checked");
+    let results = [];
+    if (data.checked == false) {
+        return results.push(true, "la case n'est pas coché");
     } else {
-        console.log("not checked");
+        return results.push(false);
+    }
+}
+
+// set data error or validation attribute
+function setDataAttribute(data, element) {
+    if (data[0] == false) {
+        element.parentElement.setAttribute("data-valid-visible", "true");
+        element.parentElement.removeAttribute("data-error-visible");
+        element.parentElement.lastChild.remove();
+    } else if (data[0] == true) {
+        element.parentElement.setAttribute("data-error-visible", "true");
+        element.parentElement.removeAttribute("data-valid-visible");
+        setErrorMsg(data[1], element);
     }
 }
 
 // keep the form data when it does not pass validation
+function validationTest(event) {
+    event.preventDefault();
+    setDataAttribute(isEmpty(firstName.value), firstName);
+    //setDataAttribute(minLength(firstName.value), firstName);
+    //setDataAttribute(isEmpty(lastName.value), lastName);
+    /*minLength(lastName.value);
+    emailValidity(email.value);
+    typeOfValue(nbOfCompetitions.value);
+    interval(nbOfCompetitions.value, 0, 99);
+    console.log(typeof (birthdate.value));
+    isEmpty(birthdate.value);
+    state(checkbox[0]);
+    state(checkbox[1]);*/
+
+    for (let data of formData) {
+        if (data.getAttribute("data-error-visible") == "true") {
+            event.preventDefault();
+        }
+    }
+}
 
 // adding validation or error messages 
+function setErrorMsg(msg, element) {
+    let errorMsg = document.createElement("div");
+    errorMsg.classList.add("errorMsg");
+    errorMsg.style.fontSize = "14px";
+    errorMsg.style.marginTop = "5px";
+    errorMsg.textContent = msg;
+    element.parentElement.appendChild(errorMsg);
+}
 
 // user confirmation message of successful submission
 
