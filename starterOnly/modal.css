@@ -260,11 +260,11 @@ input {
     border: 2px solid #80FFC0;
 }
 
-/*input[data-error]::after {
-    content: attr(data-error);
-    font-size: 0.4em;
+.errorMsg {
+    font-size: 14px;
+    margin: 7px 0 15px;
     color: red;
-}*/
+}
 
 .checkbox-label,
 .checkbox2-label {
