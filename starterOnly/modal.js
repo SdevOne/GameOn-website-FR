@@ -18,17 +18,17 @@ const birthdate = document.getElementById("birthdate");
 const nbOfCompetitions = document.getElementById("quantity");
 const radios = document.querySelectorAll("input[type='radio']");
 const checkbox = document.querySelectorAll("input[type='checkbox']");
-const btnSubmit = document.querySelector('.btn-submit');
+const btnSubmit = document.querySelector(".btn-submit");
+const subMsg = document.querySelector(".subMsg");
+const form = document.getElementById("form");
 // management modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 closeCross.addEventListener("click", closeModal);
 // verification of user data
 firstName.addEventListener("blur", function (e) {
-    setDataAttribute(isEmpty(e.target.value), firstName);
     setDataAttribute(minLength(e.target.value, 2), firstName);
 })
 lastName.addEventListener("blur", function (e) {
-    setDataAttribute(isEmpty(e.target.value), lastName);
     setDataAttribute(minLength(e.target.value, 2), lastName);
 })
 email.addEventListener("blur", function (e) {
@@ -96,12 +96,15 @@ function interval(data, minValue, maxValue) {
 }
 // check the selection of a radio button
 function isChecked(data) {
+    console.log(data);
     let results = [];
     for (let i = 0; i < data.length; i++) {
         if (data[i].checked === false) {
+            console.log(data[i].checked);
             results.push(true, "Veuillez sélectionner une ville", data[i]);
         } else {
             results.push(false, "", data[i]);
+            console.log(data[i]);
         }
         return results;
     }
@@ -148,7 +151,7 @@ function validationTest(event) {
 }
 // adding validation or error messages 
 function setErrorMsg(msg, element) {
-    if (element.parentElement.lastChild.classList !== "errorMsg") {
+    if (element.parentElement.lastChild.classList != "errorMsg") {
         let errorMsg = document.createElement("div");
         errorMsg.classList.add("errorMsg");
         errorMsg.textContent = msg;
@@ -156,5 +159,20 @@ function setErrorMsg(msg, element) {
     }
 }
 // user confirmation message of successful submission
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    closeModal();
+    stmsg();
+});
+
+document.querySelector('.subCross').addEventListener('click', closeStmsg);
+
+function stmsg() {
+    subMsg.style.display = "flex";
+}
+
+function closeStmsg() {
+    subMsg.style.display = "none";
+}
 
 // user interface and functionality test
