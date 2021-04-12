@@ -96,16 +96,16 @@ function interval(data, minValue, maxValue) {
 }
 // check the selection of a radio button
 function isChecked(data) {
-    console.log(data);
     let results = [];
     for (let i = 0; i < data.length; i++) {
-        if (data[i].checked === false) {
-            console.log(data[i].checked);
-            results.push(true, "Veuillez sélectionner une ville", data[i]);
-        } else {
-            results.push(false, "", data[i]);
+        if (data[i].checked === true) {
             console.log(data[i]);
+            results.push(false, "", data[i]);
+            return results;
         }
+    }
+    if (results.length === 0) {
+        results.push(true, "Veuillez sélectionner une ville", data[0]);
         return results;
     }
 }
@@ -141,7 +141,8 @@ function validationTest(event) {
     setDataAttribute(emailValidity(email.value), email);
     setDataAttribute(isEmpty(birthdate.value), birthdate);
     setDataAttribute(interval(nbOfCompetitions.value, 0, 99), nbOfCompetitions);
-    setDataAttribute(isChecked(radios), isChecked(radios)[2]);
+    console.log(radios);
+    setDataAttribute(isChecked(radios), radios[2]);
     setDataAttribute(state(checkbox[0]), checkbox[0]);
     for (let data of formData) {
         if (data.getAttribute("data-error-visible") === "true") {
