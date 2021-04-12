@@ -6,6 +6,7 @@ function editNav() {
         x.className = "topnav";
     }
 }
+
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
@@ -19,11 +20,13 @@ const nbOfCompetitions = document.getElementById("quantity");
 const radios = document.querySelectorAll("input[type='radio']");
 const checkbox = document.querySelectorAll("input[type='checkbox']");
 const btnSubmit = document.querySelector(".btn-submit");
-const subMsg = document.querySelector(".subMsg");
+const subMsg = document.querySelector(".submissionSuccessMsg");
 const form = document.getElementById("form");
+
 // management modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 closeCross.addEventListener("click", closeModal);
+
 // verification of user data
 firstName.addEventListener("blur", function (e) {
     setDataAttribute(minLength(e.target.value, 2), firstName);
@@ -43,14 +46,17 @@ nbOfCompetitions.addEventListener("blur", function (e) {
 btnSubmit.addEventListener("click", function (e) {
     validationTest(e);
 });
+
 // launch modal form
 function launchModal() {
     modalbg.style.display = "block";
 }
+
 // close modal form
 function closeModal() {
     modalbg.style.display = "none";
 }
+
 // test field not empty
 function isEmpty(data) {
     let results = [];
@@ -61,6 +67,7 @@ function isEmpty(data) {
     }
     return results;
 }
+
 // minimum character test
 function minLength(data, nbOfCharacters) {
     let results = [];
@@ -71,6 +78,7 @@ function minLength(data, nbOfCharacters) {
     }
     return results;
 }
+
 // test email adress
 function emailValidity(data) {
     let emailReg = new RegExp(/([\w-\.]+@[\w\.]+\.{1}[\w]+)/);
@@ -83,6 +91,7 @@ function emailValidity(data) {
     }
     return results;
 }
+
 // test interval value
 function interval(data, minValue, maxValue) {
     let value = parseInt(data);
@@ -94,12 +103,12 @@ function interval(data, minValue, maxValue) {
     }
     return results;
 }
+
 // check the selection of a radio button
 function isChecked(data) {
     let results = [];
     for (let i = 0; i < data.length; i++) {
         if (data[i].checked === true) {
-            console.log(data[i]);
             results.push(false, "", data[i]);
             return results;
         }
@@ -109,6 +118,7 @@ function isChecked(data) {
         return results;
     }
 }
+
 // check the state of the general conditions box, the other box is optional / can be left unchecked
 function state(data) {
     let results = [];
@@ -119,6 +129,7 @@ function state(data) {
     }
     return results;
 }
+
 // set data error or validation attribute
 function setDataAttribute(data, element) {
     if (data[0] === false) {
@@ -134,6 +145,7 @@ function setDataAttribute(data, element) {
         setErrorMsg(data[1], element);
     }
 }
+
 // keep the form data when it does not pass validation
 function validationTest(event) {
     setDataAttribute(minLength(firstName.value, 2), firstName);
@@ -141,7 +153,6 @@ function validationTest(event) {
     setDataAttribute(emailValidity(email.value), email);
     setDataAttribute(isEmpty(birthdate.value), birthdate);
     setDataAttribute(interval(nbOfCompetitions.value, 0, 99), nbOfCompetitions);
-    console.log(radios);
     setDataAttribute(isChecked(radios), radios[2]);
     setDataAttribute(state(checkbox[0]), checkbox[0]);
     for (let data of formData) {
@@ -150,6 +161,7 @@ function validationTest(event) {
         }
     }
 }
+
 // adding validation or error messages 
 function setErrorMsg(msg, element) {
     if (element.parentElement.lastChild.classList != "errorMsg") {
@@ -159,21 +171,22 @@ function setErrorMsg(msg, element) {
         element.parentElement.appendChild(errorMsg);
     }
 }
+
 // user confirmation message of successful submission
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     closeModal();
-    stmsg();
+    launchSubmissionMsg();
 });
 
-document.querySelector('.subCross').addEventListener('click', closeStmsg);
+document.querySelector('.closeSubmissionCross').addEventListener('click', closeSubmissionMsg);
 
-function stmsg() {
+// launch submission success message
+function launchSubmissionMsg() {
     subMsg.style.display = "flex";
 }
 
-function closeStmsg() {
+// close submission success message
+function closeSubmissionMsg() {
     subMsg.style.display = "none";
 }
-
-// user interface and functionality test
