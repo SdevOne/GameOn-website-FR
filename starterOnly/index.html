@@ -11,25 +11,28 @@
 </head>
 
 <body>
-
     <div class="topnav" id="myTopnav">
         <div class="header-logo">
             <img alt="logo" src="Logo.png" width="auto" height="auto" />
         </div>
-
         <div class="main-navbar">
-            <a href="#" class="active"><span>Accueil</span></a>
+            <a href="javascript:void(0);" class="icon" onclick="editNav()">
+                <i class="fa fa-bars"></i>
+            </a>
+            <a href="#"><span>Accueil</span></a>
             <a href="#"><span>Détails de l'évènement</span></a>
             <a href="#"><span>À propos</span></a>
             <a href="#"><span>Contact</span></a>
             <a href="#"><span>Évènements passés</span></a>
-            <a href="javascript:void(0);" class="icon" onclick="editNav()">
-                <i class="fa fa-bars"></i>
-            </a>
         </div>
     </div>
 
     <main>
+        <div class="submissionSuccessMsg">
+            <p>Votre formulaire a été envoyé</p>
+            <span class="closeSubmissionCross">X</span>
+        </div>
+
         <div class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-headline">
@@ -58,7 +61,7 @@
             <div class="content">
                 <span class="close"></span>
                 <div class="modal-body">
-                    <form name="reserve" action="index.html" method="get" onsubmit="return validate();">
+                    <form name="reserve" action="index.html" method="get" id="form">
                         <div class="formData">
                             <label for="first">Prénom</label><br>
                             <input class="text-control" type="text" id="first" name="first" minlength="2" /><br>
